@@ -1,0 +1,26 @@
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>login page</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+    <form (ngSubmit)="login()" autocomplete="off" #loginForm="ngForm">
+        <ion-list inset margin="0">
+            <ion-item text-center>
+                <ion-label color="primary" floating>Mobile Number</ion-label>
+                <ion-input type="text" required [(ngModel)]="mobileNumber" name="mobileNumber"></ion-input>
+            </ion-item>
+            <ion-item text-center>
+                <button ion-button icon-start [disabled]="!loginForm.form.valid" default>
+                <ion-icon name="log-in" type="submit"></ion-icon>
+                verify number
+            </button>
+            </ion-item>
+        </ion-list>
+
+    </form>
+
+</ion-content>
