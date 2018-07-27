@@ -1,10 +1,23 @@
 <ion-header>
     <ion-navbar>
+        <ion-buttons start>
+            <button ion-button menuToggle><ion-icon name="menu" ></ion-icon></button>
+        </ion-buttons>
         <ion-title>Notice Board</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+    <ion-list inset class="noticeBoard-list">
+        <button ion-item *ngFor="let noticeBoard of noticeBoards" (tap)="gotoNoticeBoard(noticeBoard)">
+            <ion-avatar item-start>
+                <img src="https://images-na.ssl-images-amazon.com/images/I/81Uhr%2BxcM4L._SX425_.jpg">
+            </ion-avatar>
+            <h2>{{noticeBoard.name|uppercase}}</h2>
+            <p>{{noticeBoard.description}}</p>
+        </button>
+    </ion-list>
+
     <ion-fab right bottom>
         <button ion-fab (tap)="createNoticeBoard()">
           <ion-icon name="add"></ion-icon>

@@ -3,32 +3,31 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { CreateNoticeBoardPageModule} from '../pages/create-notice-board/create-notice-board.module';
+import { LoginPageModule } from '../pages/login/login.module';
+import { OtpValidationPageModule } from '../pages/otp-validation/otp-validation.module';
+import { NoticeBoardPageModule } from '../pages/notice-board/notice-board.module'
 
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     CreateNoticeBoardPageModule,
+    LoginPageModule,
+    OtpValidationPageModule,
+    NoticeBoardPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
     HomePage,
   ],
   providers: [
