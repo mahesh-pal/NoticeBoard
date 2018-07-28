@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "151751240535",
+    "firebase_url": "https://noticeboard-6458d.firebaseio.com",
+    "project_id": "noticeboard-6458d",
+    "storage_bucket": "noticeboard-6458d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151751240535:android:88d7477ff4dd192d",
+        "android_client_info": {
+          "package_name": "com.mahi.noticeboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151751240535-2h2ghr10oefepg8c97ekmrt2iip1jq3h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mahi.noticeboard",
+            "certificate_hash": "bef1b58745c08f2acd36caff6d52573cdc0bb1be"
+          }
+        },
+        {
+          "client_id": "151751240535-ntfg7ffprh0teg1bp12vlnv6ubr4n2eb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANTN0z5CgAOkDpHAdcK1P1bDdEVkLel90"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151751240535-ntfg7ffprh0teg1bp12vlnv6ubr4n2eb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

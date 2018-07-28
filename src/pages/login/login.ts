@@ -12,7 +12,13 @@ mobileNumber:number;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 login(){
-  this.navCtrl.push(OtpValidationPage);
+(<any>window).FirebasePlugin.verifyPhoneNumber('+919780180102',60,(credentials)=>{
+console.log('sms send sucessfully');
+  console.log(credentials.verificationId);
+  console.log(credentials.instantVerification)
+},(error)=>{
+console.log(error);
+})
 }
 
 }

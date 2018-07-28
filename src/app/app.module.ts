@@ -11,6 +11,10 @@ import { CreateNoticeBoardPageModule} from '../pages/create-notice-board/create-
 import { LoginPageModule } from '../pages/login/login.module';
 import { OtpValidationPageModule } from '../pages/otp-validation/otp-validation.module';
 import { NoticeBoardPageModule } from '../pages/notice-board/notice-board.module'
+import firebase from 'firebase';
+import {config} from './firebase-config';
+
+firebase.initializeApp(config);
 
 @NgModule({
   declarations: [
