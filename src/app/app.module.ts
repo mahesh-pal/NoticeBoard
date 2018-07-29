@@ -13,6 +13,8 @@ import { OtpValidationPageModule } from '../pages/otp-validation/otp-validation.
 import { NoticeBoardPageModule } from '../pages/notice-board/notice-board.module'
 import firebase from 'firebase';
 import {config} from './firebase-config';
+import { LoadingProvider } from '../providers/loading/loading';
+import { AlertProvider } from '../providers/alert/alert';
 
 firebase.initializeApp(config);
 
@@ -37,7 +39,9 @@ firebase.initializeApp(config);
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    LoadingProvider,
+    AlertProvider
   ]
 })
 export class AppModule {}

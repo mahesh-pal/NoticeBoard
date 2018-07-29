@@ -3,7 +3,7 @@
     <name>Notice Board</name>
     <description>Notice Board APp</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.43.105:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -86,9 +86,10 @@
         <variable name="CHANNEL_NAME" value="Production" />
         <variable name="UPDATE_METHOD" value="auto" />
     </plugin>
-    <engine name="android" spec="^7.0.0" />
     <allow-navigation href="http://192.168.1.3:8100" />
     <allow-navigation href="http://192.168.1.5:8100" />
     <plugin name="cordova-plugin-contacts" spec="^3.0.1" />
     <plugin name="cordova-plugin-firebase" spec="https://github.com/jestcastro/cordova-plugin-firebase.git" />
+    <allow-navigation href="http://192.168.43.105:8100" />
+    <engine name="android" spec="7.0.0" />
 </widget>
