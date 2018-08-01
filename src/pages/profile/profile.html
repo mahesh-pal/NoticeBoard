@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-item class="profile-image">
+      <ion-icon name="camera" item-end (tap)="getUploadOptions()"></ion-icon>
+      <img [src]="user.photoURL" *ngIf="user.photoURL" alt="profile pic not available">
+      <img src="https://images-na.ssl-images-amazon.com/images/I/81Uhr%2BxcM4L._SX425_.jpg" *ngIf="!user.photoURL">
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="user.displayName" [disabled]='isReadOnly'>
+      </ion-input>
+      <ion-icon name="create" item-end (tap)="editName()"></ion-icon>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="user.phoneNumber" [disabled]="isReadOnly">
+
+      </ion-input>
+      <ion-icon name="create" item-end (tap)="editPhone()"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

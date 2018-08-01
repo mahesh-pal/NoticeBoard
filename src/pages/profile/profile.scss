@@ -1,0 +1,16 @@
+page-profile {
+  ion-list{
+    height: 100% !important;
+  }
+  .profile-image{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+      img {
+        width: 210px;
+        height:210px;
+        border-radius: 50%;
+      }
+  }
+}
