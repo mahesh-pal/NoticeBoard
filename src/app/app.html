@@ -1,15 +1,22 @@
 <ion-menu [content]="content">
     <ion-header>
         <ion-toolbar>
+            <ion-avatar item-start>
+                <img [src]="profilePic" *ngIf="profilePic">
+                <img src="https://images-na.ssl-images-amazon.com/images/I/81Uhr%2BxcM4L._SX425_.jpg" *ngIf="!profilePic">
+            </ion-avatar>
             <ion-title>Notice Board</ion-title>
         </ion-toolbar>
     </ion-header>
     <ion-content>
         <ion-list>
-            <button ion-item>
-            <ion-icon name="settings" item-left></ion-icon>Settings
+            <button ion-item (tap)="goToPage(profilePage)">
+                <ion-icon name="person" item-left></ion-icon>Profile
+            </button>
+            <button ion-item (tap)="goToPage(settingsPage)">
+            <ion-icon name="settings" item-left ></ion-icon>Settings
           </button>
-            <button ion-item>
+            <button ion-item (tap)="logout()">
             <ion-icon name="log-out" item-left></ion-icon>Log Out
           </button>
         </ion-list>

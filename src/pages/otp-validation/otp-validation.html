@@ -1,27 +1,24 @@
-<!--
-  Generated template for the OtpValidationPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-    <ion-navbar>
-        <ion-title>OTP varification</ion-title>
-    </ion-navbar>
+  <ion-navbar></ion-navbar>
 </ion-header>
 <ion-content padding>
+  <div class="otp-validation-container">
     <form (ngSubmit)="validateOtp()" autocomplete="off" #otpValidationForm="ngForm">
-        <ion-list inset>
-            <ion-item text-center>
-                <ion-label color="primary" floating>OTP</ion-label>
-                <ion-input type="text" required [(ngModel)]="otp" name="otp"></ion-input>
-            </ion-item>
-            <ion-item text-center>
-                <button ion-button icon-start [disabled]="!otpValidationForm.form.valid" default>
-              <ion-icon name="log-in" type="submit"></ion-icon>
-              submit
-            </button></ion-item>
-        </ion-list>
-
+      <ion-list inset>
+        <ion-item text-center>
+          <ion-label color="primary" floating>OTP</ion-label>
+          <ion-input type="text" required [(ngModel)]="otp" name="otp">
+          </ion-input>
+        </ion-item>
+        <p text-center>enter OTP received on your phone</p>
+        <ion-item text-center>
+          <button ion-button icon-start [disabled]="!otpValidationForm.form.valid" default>
+            <ion-icon name="log-in" type="submit">
+            </ion-icon>
+            submit
+          </button>
+        </ion-item>
+      </ion-list>
     </form>
+  </div>
 </ion-content>

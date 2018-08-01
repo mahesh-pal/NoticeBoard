@@ -3,6 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import {Contacts} from '@ionic-native/contacts';
 
 import { CreateNoticeBoardPage } from './create-notice-board';
+import { NoticeBoardDetailsPageModule } from '../notice-board-details/notice-board-details.module';
 
 @NgModule({
   declarations: [
@@ -13,10 +14,13 @@ import { CreateNoticeBoardPage } from './create-notice-board';
   ],
   imports: [
     IonicPageModule.forChild(CreateNoticeBoardPage),
+    NoticeBoardDetailsPageModule
 
   ],
   entryComponents:[
     CreateNoticeBoardPage,
   ]
 })
-export class CreateNoticeBoardPageModule {}
+export class CreateNoticeBoardPageModule {
+
+}

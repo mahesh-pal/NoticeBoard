@@ -41,3 +41,52 @@ $colors: ( primary: #00847F, secondary: #32db64, danger: #f53d3d, light: #f4f4f4
 @import "roboto";
 @import "noto-sans";
 $toolbar-background:#00847F;
+
+h2 {
+  color:#34b7f1;
+  font-size:18px!important;
+}
+p{
+  color:#075e54;
+}
+$text-input-highlight-color-valid:#25d366;
+::-webkit-input-placeholder {
+color: #075e54 !important;
+}
+*:-moz-placeholder {
+color: #075e54 !important;
+}
+*:-ms-input-placeholder {
+color: #075e54 !important;
+}
+
+input::-webkit-input-placeholder {
+color: #075e54;
+}
+input:focus::-webkit-input-placeholder {
+color: #075e54;
+}
+
+/* Firefox < 19 */
+input:-moz-placeholder {
+color: #075e54;
+}
+input:focus:-moz-placeholder {
+color: #075e54;
+}
+
+/* Firefox > 19 */
+input::-moz-placeholder {
+color: #075e54;
+}
+input:focus::-moz-placeholder {
+color: #075e54;
+}
+
+/* Internet Explorer 10 */
+input:-ms-input-placeholder {
+color: #075e54;
+}
+input:focus:-ms-input-placeholder {
+color: #075e54;
+}

@@ -1,24 +1,27 @@
 <ion-header>
 
-    <ion-navbar>
-        <ion-title>Create New Notice Board</ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <ion-title>Select contacts</ion-title>
+  </ion-navbar>
 
 </ion-header>
 
 <ion-content padding>
+  <form #form="ngForm">
     <ion-list>
-        <ion-item *ngFor="let contact of contacts">
-            <ion-avatar item-start>
-                <img [src]="sanitizer.bypassSecurityTrustUrl(contact.photos[0].value)" *ngIf="contact.photos">
-                <ion-icon name="contact" *ngIf="!contact.photos" color="primary"></ion-icon>
-            </ion-avatar>
-            <h2>{{contact.displayName}}</h2>
-        </ion-item>
+      <ion-item *ngFor="let contact of contacts;let i = index">
+        <ion-avatar item-start>
+          <img [src]="sanitizer.bypassSecurityTrustUrl(contact.photos[0].value)" *ngIf="contact.photos">
+          <ion-icon name="contact" *ngIf="!contact.photos" color="primary"></ion-icon>
+        </ion-avatar>
+        <ion-label>{{contact.displayName}}</ion-label>
+        <ion-checkbox name="phoneNumber" [(ngModel)]="isPoneNumberSelected[i]"></ion-checkbox>
+      </ion-item>
     </ion-list>
     <ion-fab right bottom>
-        <button ion-fab>
-            <ion-icon name="arrow-round-forward"></ion-icon>
-        </button>
+      <button ion-fab (tap)="gotoDetailPage()">
+        <ion-icon name="arrow-round-forward"></ion-icon>
+      </button>
     </ion-fab>
+  </form>
 </ion-content>
