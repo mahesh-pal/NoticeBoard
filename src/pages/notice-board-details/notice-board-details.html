@@ -1,18 +1,30 @@
-<!--
-  Generated template for the NoticeBoardDetailsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>noticeBoardDetails</ion-title>
+    <ion-title>group profile</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
+  <div class="groupProfile-container">
+    <form #boardProfileForm="ngForm" (submit)="createNoticeBoard()">
+      <ion-list>
+        <ion-item class="profile-image">
+          <ion-icon name="camera" item-end (tap)="getUploadOptions()"></ion-icon>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>board name</ion-label>
+          <ion-input name="boardName" type="text" [(ngModel)]="boardName" required>
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-textarea name="shortDescription" placeholder="Enter a short description" [(ngModel)]="description">
+          </ion-textarea>
+        </ion-item>
+        <ion-item>
+          <button ion-button [disabled]="!boardProfileForm.valid" type="submit">create board</button>
+        </ion-item>
+      </ion-list>
 
+    </form>
+  </div>
 </ion-content>

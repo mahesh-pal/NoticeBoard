@@ -1,8 +1,19 @@
 <ion-header>
 
     <ion-navbar>
-        <ion-title>{{noticeBoard.name|uppercase}}</ion-title>
+        <ion-title>{{noticeBoard.boardName|uppercase}}</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content padding>
+    <ion-card *ngFor="let message of messages">
+        <ion-card-header>
+            {{message.createdBy}}
+        </ion-card-header>
+        <ion-card-content>
+            {{message.text}}
+        </ion-card-content>
+    </ion-card>
 </ion-content>
+<ion-footer>
+    <ion-textarea [(ngModel)]="message" (keypress)="onSendMessage($event)"></ion-textarea>
+</ion-footer>

@@ -1,40 +1,51 @@
-import {Component, ViewChild }from '@angular/core';
-import {Platform, NavController, MenuController }from 'ionic-angular';
-import {StatusBar }from '@ionic-native/status-bar';
-import {SplashScreen }from '@ionic-native/splash-screen';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Platform, NavController, MenuController } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
-import {LoginPage}from '../pages/login/login';
-import {AuthProvider }from '../providers/auth/auth';
+import { AuthProvider } from '../providers/auth/auth';
 import firebase from 'firebase';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LoginPage } from '../pages/login/login';
-import {ProfilePage }from '../pages/profile/profile';
-import {HomePage }from '../pages/home/home';
-import {SettingsPage}from '../pages/settings/settings';
+import { ProfilePage } from '../pages/profile/profile';
+import { HomePage } from '../pages/home/home';
+import { SettingsPage } from '../pages/settings/settings';
+import { Storage } from '@ionic/storage';
+import { LoadingProvider } from '../providers/loading/loading';
 
-@Component( {
-  templateUrl:'app.html'
+@Component({
+  templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = LoginPage;
+  rootPage: any = LoginPage;
   profilePage = ProfilePage
   settingsPage = SettingsPage;
   profilePic = '';
 
-  @ViewChild('content')content:NavController;
+  @ViewChild('content') content: NavController;
 
-  constructor(platform:Platform,private keyboard:Keyboard, statusBar:StatusBar, splashScreen:SplashScreen, authProvider:AuthProvider, private menuCtrl:MenuController) {
+  constructor(platform: Platform, private keyboard: Keyboard,
+    statusBar: StatusBar, splashScreen: SplashScreen,
+    authProvider: AuthProvider,
+    private menuCtrl: MenuController,
+    private storage: Storage,
+    private changeDetectionRef: ChangeDetectorRef, private loadingProvider: LoadingProvider) {
     this.keyboard.disableScroll(true);
-    this.rootPage = LoginPage;
-    firebase.auth().onAuthStateChanged(user =>  {
+    const loader = loadingProvider.showLoading();
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+    firebase.auth().onAuthStateChanged(user => {
+      loadingProvider.dismiss(loader);
       if (user) {
         authProvider.isAuthenticated = true;
-      }else {
+        this.rootPage = HomePage;
+      } else {
         authProvider.isAuthenticated = false;
         this.rootPage = LoginPage;
       }
+      this.changeDetectionRef.detectChanges();
     });
-    platform.ready().then(() =>  {
+    platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
@@ -45,7 +56,7 @@ export class MyApp {
     this.content.push(page);
     this.menuCtrl.close();
   }
-  logout(){
+  logout() {
     firebase.auth().signOut();
     this.menuCtrl.close();
     this.content.setRoot(LoginPage);

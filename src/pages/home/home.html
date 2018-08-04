@@ -1,7 +1,9 @@
 <ion-header>
     <ion-navbar>
         <ion-buttons start *ngIf="authProvider.isAuthenticated">
-            <button ion-button menuToggle><ion-icon name="menu" ></ion-icon></button>
+            <button ion-button menuToggle>
+                <ion-icon name="menu"></ion-icon>
+            </button>
         </ion-buttons>
         <ion-title>Notice Board</ion-title>
     </ion-navbar>
@@ -11,16 +13,17 @@
     <ion-list inset class="noticeBoard-list">
         <button ion-item *ngFor="let noticeBoard of noticeBoards" (tap)="gotoNoticeBoard(noticeBoard)">
             <ion-avatar item-start>
-                <img src="https://images-na.ssl-images-amazon.com/images/I/81Uhr%2BxcM4L._SX425_.jpg">
+                <img [src]="noticeBoard.imageUrl" *ngIf="noticeBoard.imageUrl">
+                <img src="../../assets/imgs/group.png" *ngIf="!noticeBoard.imageUrl">
             </ion-avatar>
-            <h2>{{noticeBoard.name|uppercase}}</h2>
+            <h2>{{noticeBoard.boardName|uppercase}}</h2>
             <p>{{noticeBoard.description}}</p>
         </button>
     </ion-list>
 
     <ion-fab right bottom>
         <button ion-fab (tap)="createNoticeBoard()">
-          <ion-icon name="add"></ion-icon>
+            <ion-icon name="add"></ion-icon>
         </button>
     </ion-fab>
 </ion-content>
