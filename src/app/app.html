@@ -10,13 +10,13 @@
     </ion-header>
     <ion-content>
         <ion-list>
-            <button ion-item menuToggle [navPush]="profile">
+            <button ion-item (tap)="navigateTo(profile)">
                 <ion-icon name="person" item-left></ion-icon>Profile
             </button>
-            <button ion-item menuToggle [navPush]="settings">
+            <button ion-item (tap)="navigateTo(profile)">
                 <ion-icon name="settings" item-left></ion-icon>Settings
             </button>
-            <button ion-item (tap)="logout()" menuToggle>
+            <button ion-item (tap)="logout()">
                 <ion-icon name="log-out" item-left></ion-icon>Log Out
             </button>
         </ion-list>

@@ -1,18 +1,17 @@
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { Platform, NavController, MenuController } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { Keyboard } from '@ionic-native/keyboard';
-
-import firebase from 'firebase';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { MenuController, NavController, Platform } from 'ionic-angular';
 
 import { AuthProvider } from '../providers/auth/auth';
-import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
+import { Keyboard } from '@ionic-native/keyboard';
 import { LoadingProvider } from '../providers/loading/loading';
-import { User } from '../models/user';
+import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { SettingsPage } from '../pages/settings/settings';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { User } from '../models/user';
+import firebase from 'firebase';
 
 @Component({
   templateUrl: 'app.html'
@@ -22,7 +21,7 @@ export class MyApp {
   user: User;
   profile = ProfilePage;
   settings = SettingsPage;
-  @ViewChild('nav') content: NavController;
+  @ViewChild('nav') navCtrl: NavController;
 
   constructor(platform: Platform, private keyboard: Keyboard,
     statusBar: StatusBar, splashScreen: SplashScreen,
@@ -61,6 +60,11 @@ export class MyApp {
 
   logout() {
     firebase.auth().signOut();
-    this.content.setRoot(LoginPage);
+    this.navCtrl.setRoot(LoginPage);
+    this.menuCtrl.close();
+  }
+  navigateTo(page) {
+    this.navCtrl.push(page);
+    this.menuCtrl.close();
   }
 }
