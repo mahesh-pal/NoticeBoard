@@ -6,4 +6,5 @@ export interface NoticeBoard {
   createdBy: string;
   createdDate: string;
   users: string[];
+  admins: string[];
 }

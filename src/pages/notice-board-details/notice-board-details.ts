@@ -6,7 +6,17 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { NoticeBoard } from '../../models/notice-board';
-
+import { Camera, PictureSourceType, CameraOptions } from '../../../node_modules/@ionic-native/camera';
+import { AlertProvider } from '../../providers/alert/alert';
+import { UtilProvider } from '../../providers/util/util';
+const options: CameraOptions = {
+  quality: 100,
+  destinationType: 0,
+  mediaType: 0,
+  targetHeight: 210,
+  targetWidth: 210,
+  allowEdit: true,
+}
 
 @IonicPage()
 @Component({
@@ -18,9 +28,12 @@ export class NoticeBoardDetailsPage {
   dbRef = firebase.database().ref();
   boardName = '';
   description = '';
+  url = '';
   constructor(public navCtrl: NavController,
     public navParams: NavParams, private auth: AuthProvider,
-    private loadingProvider: LoadingProvider) {
+    private loadingProvider: LoadingProvider, private camera: Camera,
+    private alertProvider: AlertProvider,
+    private util: UtilProvider) {
     this.uids = this.navParams.data;
   }
 
@@ -34,6 +47,8 @@ export class NoticeBoardDetailsPage {
       boardName: this.boardName,
       users: [...this.uids],
       description: this.description,
+      admins: [currentUser.uid],
+      imageUrl: this.url
     } as NoticeBoard;
 
     this.dbRef.child('boards')
@@ -43,8 +58,11 @@ export class NoticeBoardDetailsPage {
         this.onSuccessfullGroupCreation(res);
       });
   }
-
+  getUploadOptions() {
+    this.util.createImageUploadActionSheet(this.getImage.bind(this)).present();
+  }
   onSuccessfullGroupCreation(res) {
+    this.url = '';
     const loader = this.loadingProvider.showLoading('adding group members');
     const promises = [];
     for (const id of this.uids) {
@@ -59,4 +77,32 @@ export class NoticeBoardDetailsPage {
     });
 
   }
+
+  async getImage(sourceType: PictureSourceType) {
+    options.sourceType = sourceType;
+
+    /**
+     * TODO: get pic usinf FILE_URI.
+     */
+    try {
+      var loader = this.loadingProvider.showLoading()
+      const user = this.auth.getActiveUser();
+      let picData = await this.camera.getPicture(options);
+
+      picData = 'data:image/jpeg;base64,' + picData;
+      const ref = firebase.storage().ref().child('boardsImages');
+
+      ref.putString(picData, firebase.storage.StringFormat.DATA_URL);
+
+      this.url = await ref.getDownloadURL();
+
+      this.loadingProvider.dismiss(loader);
+    } catch (error) {
+      console.log(error);
+      this.loadingProvider.dismiss(loader);
+      this.alertProvider
+        .showAlert('profile pic upload failed.', 'profile pic update failed');
+    }
+  }
+
 }

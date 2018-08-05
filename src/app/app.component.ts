@@ -20,7 +20,7 @@ export class MyApp {
   rootPage: any;
   profilePage = ProfilePage
   settingsPage = SettingsPage;
-  profilePic = '';
+  user;
 
   @ViewChild('content') content: NavController;
 
@@ -43,14 +43,15 @@ export class MyApp {
       splashScreen.hide();
       const loader = this.loadingProvider.showLoading();
       firebase.auth().onAuthStateChanged(user => {
-        console.log(user);
         this.loadingProvider.dismiss(loader);
         if (user) {
           authProvider.isAuthenticated = true;
           this.rootPage = HomePage;
+          this.user = user;
         } else {
           authProvider.isAuthenticated = false;
           this.rootPage = LoginPage;
+          this.user = null;
         }
         this.changeDetectionRef.detectChanges();
       });

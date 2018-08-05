@@ -4,6 +4,8 @@ import { NoticeBoard } from '../../models/notice-board';
 import firebase from 'firebase';
 import { AuthProvider } from '../../providers/auth/auth';
 import { Message } from '../../models/message';
+import { User } from '../../models/user';
+
 @IonicPage()
 @Component({
   selector: 'page-notice-board',
@@ -14,17 +16,39 @@ export class NoticeBoardPage {
   message: string = '';
   messages: Message[] = [];
   messageBoardRef;
+  admins: any = {};
+
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private changeDetectionRef: ChangeDetectorRef,
-    private auth: AuthProvider) {
+    public auth: AuthProvider) {
     this.noticeBoard = this.navParams.data;
     this.messageBoardRef = firebase.database().ref().child('boards')
       .child(this.noticeBoard.id);
 
+
     this.messageBoardRef.child('messages')
       .on('value', this.onMessageReceive.bind(this));
+  }
+
+  ionViewWillEnter() {
+
+    this.messageBoardRef.child('admins').on('value', (snap) => {
+      const admins = snap.val();
+      if (admins) {
+        for (const admin of admins) {
+          firebase.database().ref().child('users').child(admin)
+            .once('value', (userSnap) => {
+              const user = userSnap.val();
+              if (user) {
+                this.admins[admin] = user;
+              }
+              this.changeDetectionRef.detectChanges();
+            });
+        }
+      }
+    });
   }
 
   onSendMessage(event) {
@@ -49,7 +73,7 @@ export class NoticeBoardPage {
         id: messageKey,
         text: messages[messageKey].text,
         createdAt: messages[messageKey].createdAt,
-        createdBy: messages[messageKey].createdBy
+        createdBy: messages[messageKey].createdBy,
       })
     }
     setTimeout(() => {

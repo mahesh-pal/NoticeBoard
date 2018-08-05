@@ -7,13 +7,14 @@
 <ion-content padding>
     <ion-card *ngFor="let message of messages">
         <ion-card-header>
-            {{message.createdBy}}
+            {{admins[message.createdBy]?.displayName}}
         </ion-card-header>
         <ion-card-content>
             {{message.text}}
         </ion-card-content>
     </ion-card>
 </ion-content>
-<ion-footer>
-    <ion-textarea [(ngModel)]="message" (keypress)="onSendMessage($event)"></ion-textarea>
+<ion-footer *ngIf="admins[auth.getActiveUser().uid]">
+    <ion-textarea [(ngModel)]="message" placeholder="Type your message here" (keypress)="onSendMessage($event)">
+    </ion-textarea>
 </ion-footer>
