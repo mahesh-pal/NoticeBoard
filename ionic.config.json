@@ -1,8 +1,8 @@
 {
-    "name": "NoticeBoard",
-    "app_id": "5d8bf640",
-    "type": "ionic-angular",
-    "integrations": {
-        "cordova": {}
-    }
+  "name": "NoticeBoard",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "pro_id": "5d8bf640"
 }

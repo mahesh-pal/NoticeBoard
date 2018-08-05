@@ -34,4 +34,5 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 google-services.json
-src/app/firebase-config.ts
+src/firebase-config.ts
+
