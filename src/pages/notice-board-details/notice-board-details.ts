@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Camera, CameraOptions, PictureSourceType } from '../../../node_modules/@ionic-native/camera';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import firebase from 'firebase';
+import { AlertProvider } from '../../providers/alert/alert';
 import { AuthProvider } from '../../providers/auth/auth';
+import { Component } from '@angular/core';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { NoticeBoard } from '../../models/notice-board';
-import { Camera, PictureSourceType, CameraOptions } from '../../../node_modules/@ionic-native/camera';
-import { AlertProvider } from '../../providers/alert/alert';
 import { UtilProvider } from '../../providers/util/util';
+import firebase from 'firebase';
+
 const options: CameraOptions = {
   quality: 100,
   destinationType: 0,
@@ -24,33 +25,35 @@ const options: CameraOptions = {
   templateUrl: 'notice-board-details.html',
 })
 export class NoticeBoardDetailsPage {
-  uids: string[];
+  userIds: string[];
   dbRef = firebase.database().ref();
   boardName = '';
   description = '';
   url = '';
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams, private auth: AuthProvider,
     private loadingProvider: LoadingProvider, private camera: Camera,
     private alertProvider: AlertProvider,
     private util: UtilProvider) {
-    this.uids = this.navParams.data;
+    this.userIds = this.navParams.data;
   }
 
   createNoticeBoard() {
     const currentUser = this.auth.getActiveUser();
-    this.uids.push(currentUser.uid);
+    this.userIds.push(currentUser.uid);
     const loader = this.loadingProvider.showLoading('creating group');
     const board = {
       createdBy: currentUser.uid,
       createdDate: Date.now() + '',
       boardName: this.boardName,
-      users: [...this.uids],
+      users: [...this.userIds],
       description: this.description,
       admins: [currentUser.uid],
       imageUrl: this.url
     } as NoticeBoard;
 
+    // Saving board to firebase
     this.dbRef.child('boards')
       .push(board)
       .then((res) => {
@@ -58,14 +61,18 @@ export class NoticeBoardDetailsPage {
         this.onSuccessfullGroupCreation(res);
       });
   }
+
   getUploadOptions() {
-    this.util.createImageUploadActionSheet(this.getImage.bind(this)).present();
+    this.util.createImageUploadActionSheet(this.getImage.bind(this))
+      .present();
   }
+
   onSuccessfullGroupCreation(res) {
     this.url = '';
-    const loader = this.loadingProvider.showLoading('adding group members');
+    const loader = this.loadingProvider
+      .showLoading('adding group members');
     const promises = [];
-    for (const id of this.uids) {
+    for (const id of this.userIds) {
       promises.push(this.dbRef.child('users').child(id).child('boards')
         .child(res.key).set({
           boardName: this.boardName
@@ -75,7 +82,6 @@ export class NoticeBoardDetailsPage {
       this.loadingProvider.dismiss(loader);
       this.navCtrl.setRoot(HomePage);
     });
-
   }
 
   async getImage(sourceType: PictureSourceType) {
@@ -98,7 +104,6 @@ export class NoticeBoardDetailsPage {
 
       this.loadingProvider.dismiss(loader);
     } catch (error) {
-      console.log(error);
       this.loadingProvider.dismiss(loader);
       this.alertProvider
         .showAlert('profile pic upload failed.', 'profile pic update failed');

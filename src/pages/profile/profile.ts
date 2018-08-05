@@ -1,15 +1,15 @@
-import { AuthProvider } from '../../providers/auth/auth';
-import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
-
-import { IonicPage, ActionSheetController, NavController, TextInput } from 'ionic-angular';
+import { ActionSheetController, IonicPage, NavController, TextInput } from 'ionic-angular';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera';
-import firebase from 'firebase';
-import { LoadingProvider } from '../../providers/loading/loading';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+
 import { AlertProvider } from '../../providers/alert/alert';
-import { NavParams } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
 import { HomePage } from '../home/home';
-import { UtilProvider } from '../../providers/util/util';
+import { LoadingProvider } from '../../providers/loading/loading';
+import { NavParams } from 'ionic-angular';
 import { User } from '../../models/user';
+import { UtilProvider } from '../../providers/util/util';
+import firebase from 'firebase';
 
 const options: CameraOptions = {
   quality: 100,
@@ -44,8 +44,6 @@ export class ProfilePage {
     this.isNameReadOnly = !this.isCreateUser;
     this.user = this.auth.getActiveUser();
   }
-
-
 
   getUploadOptions() {
     let actionSheet = this.util

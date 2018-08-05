@@ -1,12 +1,11 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import firebase, { User } from 'firebase';
 
-import { NavController } from 'ionic-angular';
-
+import { AuthProvider } from '../../providers/auth/auth';
 import { CreateNoticeBoardPage } from '../create-notice-board/create-notice-board';
+import { NavController } from 'ionic-angular';
 import { NoticeBoard } from '../../models/notice-board';
 import { NoticeBoardPage } from '../notice-board/notice-board';
-import { AuthProvider } from '../../providers/auth/auth';
-import firebase from 'firebase';
 
 @Component({
   selector: 'page-home',
@@ -15,35 +14,38 @@ import firebase from 'firebase';
 export class HomePage {
   noticeBoards: NoticeBoard[] = [];
   userDbRef;
+  currentUser: User;
+  noticeBoardPage = NoticeBoardPage;
+  createNoticeBoardPage = CreateNoticeBoardPage;
   constructor(private nav: NavController,
     public authProvider: AuthProvider,
     private chageDetectionRef: ChangeDetectorRef) {
-    const user = this.authProvider.getActiveUser();
+  }
+  ionViewWillEnter() {
+    this.currentUser = this.authProvider.getActiveUser();
     this.userDbRef = firebase.database().ref().child('users')
-      .child(user.uid);
-
-    this.userDbRef.child('boards')
-      .on('value', snap => {
-        if (snap.val()) {
-          this.noticeBoards = [];
-          const boards = snap.val();
-          Object.keys(boards).forEach(key => {
-            const board = boards[key] as NoticeBoard;
-            board.id = key;
-            this.noticeBoards.push(board);
-          });
-          setTimeout(() => {
-            this.chageDetectionRef.detectChanges();
-          }, 0)
-        }
-      });
+      .child(this.currentUser.uid).child('boards');
+    this.userDbRef.on('value', this.getBoardsForUser.bind(this));
   }
 
-  createNoticeBoard() {
-    this.nav.push(CreateNoticeBoardPage);
+  ionViewDidLeave() {
+    this.userDbRef.off();
   }
 
-  gotoNoticeBoard(noticeBoard: NoticeBoard) {
-    this.nav.push(NoticeBoardPage, noticeBoard);
+  getBoardsForUser(snap) {
+    if (!snap.val()) return;
+    this.noticeBoards = [];
+    const boards = snap.val();
+    // TODO: better way to iterate snapshot
+    const boardsIds = Object.keys(boards);
+    for (const boardId of boardsIds) {
+      const board = boards[boardId] as NoticeBoard;
+      board.id = boardId;
+      this.noticeBoards.push(board);
+    }
+    // Running ChangeDetection manually
+    setTimeout(() => {
+      this.chageDetectionRef.detectChanges();
+    }, 0);
   }
 }

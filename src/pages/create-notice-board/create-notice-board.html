@@ -15,11 +15,11 @@
           <img src="../../assets/imgs/user.jpg" *ngIf="!user.photoUrl" color="primary">
         </ion-avatar>
         <ion-label>{{user.displayName}}</ion-label>
-        <ion-checkbox name="uid" [(ngModel)]="isPoneNumberSelected[i]"></ion-checkbox>
+        <ion-checkbox name="uid" [(ngModel)]="selectedUsers[i]"></ion-checkbox>
       </ion-item>
     </ion-list>
     <ion-fab right bottom>
-      <button ion-fab (tap)="gotoDetailPage()">
+      <button ion-fab (tap)="navigateToDetailPage()">
         <ion-icon name="arrow-round-forward"></ion-icon>
       </button>
     </ion-fab>

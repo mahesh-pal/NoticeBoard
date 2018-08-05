@@ -1,4 +1,4 @@
-<ion-menu [content]="content">
+<ion-menu [content]="nav">
     <ion-header>
         <ion-toolbar>
             <ion-avatar item-start>
@@ -10,16 +10,16 @@
     </ion-header>
     <ion-content>
         <ion-list>
-            <button ion-item (tap)="goToPage(profilePage)">
+            <button ion-item menuToggle [navPush]="profile">
                 <ion-icon name="person" item-left></ion-icon>Profile
             </button>
-            <button ion-item (tap)="goToPage(settingsPage)">
+            <button ion-item menuToggle [navPush]="settings">
                 <ion-icon name="settings" item-left></ion-icon>Settings
             </button>
-            <button ion-item (tap)="logout()">
+            <button ion-item (tap)="logout()" menuToggle>
                 <ion-icon name="log-out" item-left></ion-icon>Log Out
             </button>
         </ion-list>
     </ion-content>
 </ion-menu>
-<ion-nav [root]="rootPage " #content></ion-nav>
+<ion-nav [root]="rootPage " #nav></ion-nav>
