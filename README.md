@@ -1,5 +1,5 @@
 
-<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png" width="100">
+<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png" width="200">
 
 
 
