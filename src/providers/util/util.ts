@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActionSheetController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';

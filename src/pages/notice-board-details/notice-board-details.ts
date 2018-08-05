@@ -46,12 +46,12 @@ export class NoticeBoardDetailsPage {
 
   onSuccessfullGroupCreation(res) {
     const loader = this.loadingProvider.showLoading('adding group members');
-    const uid = this.auth.getActiveUser().uid;
     const promises = [];
     for (const id of this.uids) {
-      promises.push(this.dbRef.child('users').child(id).child('boards').child(res.key).set({
-        boardName: this.boardName
-      }));
+      promises.push(this.dbRef.child('users').child(id).child('boards')
+        .child(res.key).set({
+          boardName: this.boardName
+        }));
     }
     Promise.all(promises).then(() => {
       this.loadingProvider.dismiss(loader);

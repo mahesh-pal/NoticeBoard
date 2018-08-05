@@ -42,13 +42,10 @@ export class ProfilePage {
     private navParam: NavParams) {
     this.isCreateUser = !!this.navParam.data.createUser;
     this.isNameReadOnly = !this.isCreateUser;
-    const user = this.auth.getActiveUser();
-    firebase.database().ref().child('users').child(user.uid)
-      .on('value', snap => {
-        if (snap.val())
-          this.user = snap.val() as User;
-      });
+    this.user = this.auth.getActiveUser();
   }
+
+
 
   getUploadOptions() {
     let actionSheet = this.util

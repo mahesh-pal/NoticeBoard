@@ -17,7 +17,7 @@ import { LoadingProvider } from '../providers/loading/loading';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage: any = LoginPage;
+  rootPage: any;
   profilePage = ProfilePage
   settingsPage = SettingsPage;
   profilePic = '';
@@ -28,28 +28,32 @@ export class MyApp {
     statusBar: StatusBar, splashScreen: SplashScreen,
     authProvider: AuthProvider,
     private menuCtrl: MenuController,
-    private storage: Storage,
-    private changeDetectionRef: ChangeDetectorRef, private loadingProvider: LoadingProvider) {
+    private changeDetectionRef: ChangeDetectorRef,
+    private loadingProvider: LoadingProvider) {
     this.keyboard.disableScroll(true);
-    const loader = loadingProvider.showLoading();
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-    firebase.auth().onAuthStateChanged(user => {
-      loadingProvider.dismiss(loader);
-      if (user) {
-        authProvider.isAuthenticated = true;
-        this.rootPage = HomePage;
-      } else {
-        authProvider.isAuthenticated = false;
-        this.rootPage = LoginPage;
-      }
-      this.changeDetectionRef.detectChanges();
-    });
+    firebase.auth().setPersistence(
+      firebase.auth.Auth.Persistence.LOCAL);
+
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      const loader = this.loadingProvider.showLoading();
+      firebase.auth().onAuthStateChanged(user => {
+        console.log(user);
+        this.loadingProvider.dismiss(loader);
+        if (user) {
+          authProvider.isAuthenticated = true;
+          this.rootPage = HomePage;
+        } else {
+          authProvider.isAuthenticated = false;
+          this.rootPage = LoginPage;
+        }
+        this.changeDetectionRef.detectChanges();
+      });
     });
   }
   goToPage(page) {
