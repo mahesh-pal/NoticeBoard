@@ -13,7 +13,7 @@ import { OtpValidationPageModule } from '../pages/otp-validation/otp-validation.
 import { NoticeBoardPageModule } from '../pages/notice-board/notice-board.module'
 import firebase from 'firebase';
 import { SettingsPageModule } from '../pages/settings/settings.module';
-import { config } from './firebase-config';
+import { config } from '../firebase-config';
 import { LoadingProvider } from '../providers/loading/loading';
 import { AlertProvider } from '../providers/alert/alert';
 import { AuthProvider } from '../providers/auth/auth';
