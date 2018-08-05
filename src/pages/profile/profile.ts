@@ -30,7 +30,6 @@ export class ProfilePage {
   imageFileName: any;
   isNameReadOnly = true;
   isCreateUser = false;
-  @ViewChild('nameInput') nameInput: TextInput;
 
   constructor(public navCtrl: NavController,
     private util: UtilProvider,
@@ -41,7 +40,6 @@ export class ProfilePage {
     private changeDetection: ChangeDetectorRef,
     private navParam: NavParams) {
     this.isCreateUser = !!this.navParam.data.createUser;
-    this.isNameReadOnly = !this.isCreateUser;
     this.user = this.auth.getActiveUser();
   }
 
@@ -63,6 +61,7 @@ export class ProfilePage {
       let picData = await this.camera.getPicture(options);
 
       picData = 'data:image/jpeg;base64,' + picData;
+
       const ref = firebase.storage().ref().child('profileImages')
         .child(user.uid);
       ref.putString(picData, firebase.storage.StringFormat.DATA_URL);
@@ -72,11 +71,15 @@ export class ProfilePage {
         displayName: user.displayName,
         photoURL: url
       });
+
       firebase.database().ref().child('users').child(user.uid).update({
         photoURL: url
-      })
+      });
+
       this.loadingProvider.dismiss(loader);
-      this.changeDetection.detectChanges();
+      setTimeout(() => {
+        this.changeDetection.detectChanges();
+      }, 0)
     } catch (error) {
       this.loadingProvider.dismiss(loader);
       this.alertProvider
@@ -99,6 +102,7 @@ export class ProfilePage {
       this.loadingProvider.dismiss(loader);
     })
   }
+
   onNext() {
     const user = this.auth.getActiveUser();
     user.updateProfile({
@@ -108,6 +112,7 @@ export class ProfilePage {
       this.onSuccessfullProfileCreation.bind(this),
       this.onFailed.bind(this));
   }
+
   onSuccessfullProfileCreation() {
     const currentUser = this.auth.getActiveUser();
     const user = {} as User;
@@ -120,6 +125,7 @@ export class ProfilePage {
     firebase.database().ref().child('users').child(currentUser.uid).set(user);
     this.navCtrl.setRoot(HomePage);
   }
+
   onFailed() {
     this.alertProvider
       .showAlert('profile creation failed',

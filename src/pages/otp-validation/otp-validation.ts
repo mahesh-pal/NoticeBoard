@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading } from 'ionic-angular';
-import firebase from 'firebase';
+import { IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
 
+import { AlertProvider } from '../../providers/alert/alert';
+import { Component } from '@angular/core';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
-import { AlertProvider } from '../../providers/alert/alert';
-import { UserCredential } from 'firebase/auth';
 import { ProfilePage } from '../profile/profile';
 import { Storage } from '@ionic/storage';
+import { UserCredential } from 'firebase/auth';
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -19,6 +19,7 @@ export class OtpValidationPage {
   otp: string;
   loader: Loading | null = null;
   dbRef = firebase.database().ref();
+
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
     private loadingProvider: LoadingProvider,

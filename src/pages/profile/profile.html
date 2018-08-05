@@ -12,8 +12,7 @@
       <img src="../../assets/imgs/user.jpg" *ngIf="!user.photoURL">
     </ion-item>
     <ion-item>
-      <ion-input type="text" (ionBlur)="updateDisplayName()" [(ngModel)]=" user.displayName "
-        #nameInput>
+      <ion-input type="text" (ionBlur)="updateDisplayName()" [(ngModel)]="user.displayName">
       </ion-input>
     </ion-item>
   </ion-list>
