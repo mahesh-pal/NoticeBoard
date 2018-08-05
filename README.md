@@ -14,12 +14,10 @@
 
 
 
-# Project Title
+# Notice Board
 
-This app is an online version of notice board used in ofiices and
-schools. This app will users to create a notice board for their purpose.
-Only admins of a board can post a notice on the board. Rest of the member will
-act as audiance and can only have read access.
+
+This app is an online version of notice board used in offices and schools. This app will users to create a notice board for their purpose. Only admins of a board can post a notice on the board. Rest of the member will act as audience and can only have read access.
 
 ## Getting Started
 
