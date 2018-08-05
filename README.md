@@ -1,4 +1,7 @@
-![screenshot](https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png {:height="24px" width="48px"})
+![screenshot](https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png )
+<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png" width="48">
+
+
 
 # Project Title
 
