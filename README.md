@@ -1,8 +1,15 @@
 
-<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png" width="200" style="float:left">
-<img src="https://github.com/mahesh-pal/NoticeBoard/blob/master/screenshots/Screen%20Shot%202018-08-05%20at%206.04.33%20PM.png" width="200" style="float:left">
-<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.05.42%20PM.png" width="200" style="float:left">
-<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.07.27%20PM.png" width="200" style="float:left">
+
+
+
+| ------------- | ------------- |
+| <img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.02.25%20PM.png" width="200" style="float:left">  | <img src="https://github.com/mahesh-pal/NoticeBoard/blob/master/screenshots/Screen%20Shot%202018-08-05%20at%206.04.33%20PM.png" width="200" style="float:left">  |
+|<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.05.42%20PM.png" width="200" style="float:left">  | 
+<img src="https://raw.githubusercontent.com/mahesh-pal/NoticeBoard/master/screenshots/Screen%20Shot%202018-08-05%20at%206.07.27%20PM.png" width="200" style="float:left"> |
+
+
+
+
 
 
 
