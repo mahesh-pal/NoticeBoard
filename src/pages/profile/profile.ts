@@ -1,12 +1,16 @@
+import 'rxjs/add/operator/first';
+
 import { ActionSheetController, IonicPage, NavController, TextInput } from 'ionic-angular';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 
 import { AlertProvider } from '../../providers/alert/alert';
+import { AngularFireDatabase } from '../../../node_modules/angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { NavParams } from 'ionic-angular';
+import { ReplaySubject } from '../../../node_modules/rxjs/Rx';
 import { User } from '../../models/user';
 import { UtilProvider } from '../../providers/util/util';
 import firebase from 'firebase';
@@ -38,9 +42,14 @@ export class ProfilePage {
     private loadingProvider: LoadingProvider,
     private alertProvider: AlertProvider,
     private changeDetection: ChangeDetectorRef,
-    private navParam: NavParams) {
+    private navParam: NavParams,
+    private afDb: AngularFireDatabase) {
     this.isCreateUser = !!this.navParam.data.createUser;
-    this.user = this.auth.getActiveUser();
+    const user = this.auth.getActiveUser();
+    this.user = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+    }
   }
 
   getUploadOptions() {
@@ -95,11 +104,16 @@ export class ProfilePage {
       displayName: this.user.displayName,
       photoURL: this.user.photoURL
     }).then(() => {
-      firebase.database().ref().child('users').child(activeUser.uid)
+      this.afDb.object('users/' + activeUser.uid)
         .update({
           displayName: this.user.displayName
-        });
-      this.loadingProvider.dismiss(loader);
+        }).then(() => {
+          this.afDb.object('userPhoneMappings/' + activeUser.phoneNumber)
+            .update({
+              displayName: this.user.displayName
+            })
+          this.loadingProvider.dismiss(loader);
+        });;
     })
   }
 
@@ -118,12 +132,22 @@ export class ProfilePage {
     const user = {} as User;
     user.createdDate = Date.now() + '';
     user.isActive = true;
-    user.displayName = currentUser.displayName;
+    user.displayName = this.user.displayName;
     user.photoURL = currentUser.photoURL;
     user.phoneNumber = currentUser.phoneNumber;
-
-    firebase.database().ref().child('users').child(currentUser.uid).set(user);
-    this.navCtrl.setRoot(HomePage);
+    const updates = {};
+    updates['users/' + currentUser.uid] = user;
+    updates['userPhoneMappings/' + currentUser.phoneNumber] =
+      {
+        uid: currentUser.uid,
+        displayName: currentUser.displayName,
+        photoURL: currentUser.photoURL,
+      };
+    this.afDb.object('/').update(updates).then((success) => {
+      this.navCtrl.setRoot(HomePage);
+    }, (error) => {
+      console.log(error.message);
+    });
   }
 
   onFailed() {
@@ -132,3 +156,4 @@ export class ProfilePage {
         'profile creation failed');
   }
 }
+

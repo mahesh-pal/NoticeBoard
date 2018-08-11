@@ -1,3 +1,5 @@
+import 'rxjs/add/operator/first';
+
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -8,6 +10,7 @@ import { Contacts } from '@ionic-native/contacts';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NoticeBoardDetailsPage } from '../notice-board-details/notice-board-details';
 import { User } from '../../models/user';
+import { subscribeOn } from '../../../node_modules/rxjs/operator/subscribeOn';
 
 @IonicPage()
 @Component({
@@ -16,7 +19,7 @@ import { User } from '../../models/user';
 })
 export class CreateNoticeBoardPage {
   selectedUsers: boolean[] = [];
-  users: User[];
+  users: User[] = [];
   uids: Array<string> = [];
   DETAIL_PAGE = NoticeBoardDetailsPage;
   //Selected contacts to be added to board.
@@ -38,29 +41,19 @@ export class CreateNoticeBoardPage {
   }
 
   onContactRetrival(contacts) {
+    const currentUser = this.auth.getActiveUser();
     for (const contact of contacts) {
       if (contact.phoneNumbers && contact.phoneNumbers.length > 0) {
         this.contactList.push(contact.phoneNumbers[0].value);
       }
     }
     for (let contact of this.contactList) {
-
-    }
-  }
-
-  // TODO: get users only for which contact is selected
-  getSelectedUsers(snap) {
-    const users = snap.val();
-    const currentUserUid = this.auth.getActiveUser().uid;
-    const selectedUids = Object.keys(users)
-      .filter(uid => uid != currentUserUid &&
-        this.contactList.indexOf(users[uid].phoneNumber) != -1);
-
-    this.users = [];
-    for (const uid of selectedUids) {
-      const user = users[uid] as User;
-      user.uid = uid;
-      this.users.push(user);
+      contact = contact.replace(/[|#|_|]/g, '').replace(/\s\s+/g, '');
+      this.afDatabase.object('userPhoneMappings/' + contact).valueChanges()
+        .first().subscribe(user => {
+          if (user && user.uid !== currentUser.uid)
+            this.users.push(user as User);
+        });
     }
   }
 
@@ -74,3 +67,4 @@ export class CreateNoticeBoardPage {
     this.navCtrl.push(this.DETAIL_PAGE, this.uids);
   }
 }
+

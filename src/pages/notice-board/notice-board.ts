@@ -31,8 +31,9 @@ export class NoticeBoardPage {
   }
 
   ionViewWillEnter() {
-    this.afDb.list('boards/admins').valueChanges().subscribe(admins => {
-      console.log(admins);
+    this.afDb.object('boards/' + this.noticeBoard.id + '/admins').valueChanges().subscribe(admins => {
+      this.admins = admins;
+      console.log(this.admins);
     });
   }
 
@@ -49,3 +50,4 @@ export class NoticeBoardPage {
     }
   }
 }
+;

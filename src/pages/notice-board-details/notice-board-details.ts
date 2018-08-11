@@ -46,45 +46,44 @@ export class NoticeBoardDetailsPage {
     const currentUser = this.auth.getActiveUser();
     this.userIds.push(currentUser.uid);
     const loader = this.loadingProvider.showLoading('creating group');
+    const admin = {};
+    admin[currentUser.uid] = { uid: currentUser.uid, displayName: currentUser.displayName };
     const board = {
       createdBy: currentUser.uid,
       createdDate: Date.now() + '',
       boardName: this.boardName,
       users: [...this.userIds],
       description: this.description,
-      admins: [currentUser.uid],
+      admins: admin
+      ,
       imageUrl: this.url
     } as NoticeBoard;
 
-    // Saving board to firebase
-    this.afDb.list('boards')
-      .push(board)
-      .then((res) => {
-        this.loadingProvider.dismiss(loader);
-        this.onSuccessfullGroupCreation(res);
-      });
+    const boardKey = this.afDb.list('/boards').push().key;
+    const updates = {};
+
+    for (const uid of this.userIds) {
+      updates['users/' + uid + '/boards/' + boardKey] =
+        {
+          boardName: this.boardName,
+          imageUrl: this.url,
+          description: this.description,
+          id: boardKey,
+        }
+    }
+    updates['boards/' + boardKey] = board;
+    this.afDb.object('/').update(updates).then(() => {
+      this.loadingProvider.dismiss(loader);
+      this.navCtrl.setRoot(HomePage);
+    }, () => {
+      this.loadingProvider.dismiss(loader);
+      this.alertProvider('group creation failed');
+    })
   }
 
   getUploadOptions() {
     this.util.createImageUploadActionSheet(this.getImage.bind(this))
       .present();
-  }
-
-  onSuccessfullGroupCreation(res) {
-    this.url = '';
-    const loader = this.loadingProvider
-      .showLoading('adding group members');
-    const promises = [];
-    for (const id of this.userIds) {
-      promises.push(this.afDb.object('users/' + id + '/boards/' + res.key)
-        .set({
-          boardName: this.boardName
-        }));
-    }
-    Promise.all(promises).then(() => {
-      this.loadingProvider.dismiss(loader);
-      this.navCtrl.setRoot(HomePage);
-    });
   }
 
   async getImage(sourceType: PictureSourceType) {
@@ -113,3 +112,5 @@ export class NoticeBoardDetailsPage {
   }
 
 }
+
+

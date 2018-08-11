@@ -1,3 +1,5 @@
+import 'rxjs/add/operator/first';
+
 import { IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
 
 import { AlertProvider } from '../../providers/alert/alert';

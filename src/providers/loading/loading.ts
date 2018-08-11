@@ -1,6 +1,7 @@
+import { Loading, LoadingController } from 'ionic-angular';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoadingController, Loading } from 'ionic-angular';
 
 @Injectable()
 export class LoadingProvider {
@@ -21,7 +22,8 @@ export class LoadingProvider {
     }
 
     dismiss(loader: Loading) {
-        loader.dismiss();
+        if (loader)
+            loader.dismiss();
     }
 
 }
