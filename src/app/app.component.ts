@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MenuController, NavController, Platform } from 'ionic-angular';
 
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../providers/auth/auth';
 import { HomePage } from '../pages/home/home';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -11,7 +13,6 @@ import { SettingsPage } from '../pages/settings/settings';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { User } from '../models/user';
-import firebase from 'firebase';
 
 @Component({
   templateUrl: 'app.html'
@@ -25,18 +26,21 @@ export class MyApp {
 
   constructor(platform: Platform, private keyboard: Keyboard,
     statusBar: StatusBar, splashScreen: SplashScreen,
-    authProvider: AuthProvider, private menuCtrl: MenuController,
-    private loadingProvider: LoadingProvider) {
+    private menuCtrl: MenuController,
+    private loadingProvider: LoadingProvider,
+    private authPrpvider: AngularFireAuth,
+    private db: AngularFireDatabase) {
     //disable keyboard scroll. this line prevents UI getting distorted on
     //android device.
     this.keyboard.disableScroll(true);
     // Making Authentication persistance
-    firebase.auth().setPersistence(
-      firebase.auth.Auth.Persistence.LOCAL);
 
+    // firebase.auth().setPersistence(
+    //  firebase.auth.Auth.Persistence.LOCAL);
+    //this.authPrpvider.auth.setPersistence(this.authPrpvider.auth.Persistence.LOCAL)
     const loader = this.loadingProvider.showLoading();
     //Check if user is logged in.
-    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+    const subscription = this.authPrpvider.authState.subscribe(user => {
       this.loadingProvider.dismiss(loader);
       if (user) {
         //authProvider.isAuthenticated = true;
@@ -47,7 +51,7 @@ export class MyApp {
         this.rootPage = LoginPage;
         this.user = null;
       }
-      unsubscribe();
+      subscription.unsubscribe();
     });
 
     platform.ready().then(() => {
@@ -59,7 +63,7 @@ export class MyApp {
   }
 
   logout() {
-    firebase.auth().signOut();
+    this.authPrpvider.auth.signOut();
     this.navCtrl.setRoot(LoginPage);
     this.menuCtrl.close();
   }

@@ -2,13 +2,14 @@ import { Camera, CameraOptions, PictureSourceType } from '../../../node_modules/
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { AlertProvider } from '../../providers/alert/alert';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import { Component } from '@angular/core';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { NoticeBoard } from '../../models/notice-board';
 import { UtilProvider } from '../../providers/util/util';
-import firebase from 'firebase';
 
 const options: CameraOptions = {
   quality: 100,
@@ -26,16 +27,18 @@ const options: CameraOptions = {
 })
 export class NoticeBoardDetailsPage {
   userIds: string[];
-  dbRef = firebase.database().ref();
   boardName = '';
   description = '';
   url = '';
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams, private auth: AuthProvider,
-    private loadingProvider: LoadingProvider, private camera: Camera,
+    private loadingProvider: LoadingProvider,
+    private camera: Camera,
+    private afDb: AngularFireDatabase,
     private alertProvider: AlertProvider,
-    private util: UtilProvider) {
+    private util: UtilProvider,
+    private afStorage: AngularFireStorage) {
     this.userIds = this.navParams.data;
   }
 
@@ -54,7 +57,7 @@ export class NoticeBoardDetailsPage {
     } as NoticeBoard;
 
     // Saving board to firebase
-    this.dbRef.child('boards')
+    this.afDb.list('boards')
       .push(board)
       .then((res) => {
         this.loadingProvider.dismiss(loader);
@@ -73,8 +76,8 @@ export class NoticeBoardDetailsPage {
       .showLoading('adding group members');
     const promises = [];
     for (const id of this.userIds) {
-      promises.push(this.dbRef.child('users').child(id).child('boards')
-        .child(res.key).set({
+      promises.push(this.afDb.object('users/' + id + '/boards/' + res.key)
+        .set({
           boardName: this.boardName
         }));
     }
@@ -96,11 +99,10 @@ export class NoticeBoardDetailsPage {
       let picData = await this.camera.getPicture(options);
 
       picData = 'data:image/jpeg;base64,' + picData;
-      const ref = firebase.storage().ref().child('boardsImages');
-
-      ref.putString(picData, firebase.storage.StringFormat.DATA_URL);
-
-      this.url = await ref.getDownloadURL();
+      this.afStorage.upload('boardsImages', picData);
+      this.afStorage.ref('boardsImages').getDownloadURL().subscribe((url) => {
+        this.url = url;
+      })
 
       this.loadingProvider.dismiss(loader);
     } catch (error) {

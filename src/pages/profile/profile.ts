@@ -29,7 +29,7 @@ export class ProfilePage {
   imageURI: any;
   imageFileName: any;
   isNameReadOnly = true;
-  isCreateUser = false;
+  isCreateUser;
 
   constructor(public navCtrl: NavController,
     private util: UtilProvider,

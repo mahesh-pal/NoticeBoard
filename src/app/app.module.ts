@@ -1,26 +1,26 @@
-import { NgModule, ErrorHandler } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
-import { HomePage } from '../pages/home/home';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { Keyboard } from '@ionic-native/keyboard';
-import { CreateNoticeBoardPageModule } from '../pages/create-notice-board/create-notice-board.module';
-import { LoginPageModule } from '../pages/login/login.module';
-import { OtpValidationPageModule } from '../pages/otp-validation/otp-validation.module';
-import { NoticeBoardPageModule } from '../pages/notice-board/notice-board.module'
-import firebase from 'firebase';
-import { SettingsPageModule } from '../pages/settings/settings.module';
-import { config } from '../firebase-config';
-import { LoadingProvider } from '../providers/loading/loading';
 import { AlertProvider } from '../providers/alert/alert';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule } from 'angularfire2';
 import { AuthProvider } from '../providers/auth/auth';
-import { ProfilePageModule } from '../pages/profile/profile.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { CreateNoticeBoardPageModule } from '../pages/create-notice-board/create-notice-board.module';
+import { HomePage } from '../pages/home/home';
 import { IonicStorageModule } from '@ionic/storage';
-
-firebase.initializeApp(config);
+import { Keyboard } from '@ionic-native/keyboard';
+import { LoadingProvider } from '../providers/loading/loading';
+import { LoginPageModule } from '../pages/login/login.module';
+import { MyApp } from './app.component';
+import { NoticeBoardPageModule } from '../pages/notice-board/notice-board.module'
+import { OtpValidationPageModule } from '../pages/otp-validation/otp-validation.module';
+import { ProfilePageModule } from '../pages/profile/profile.module';
+import { SettingsPageModule } from '../pages/settings/settings.module';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { StatusBar } from '@ionic-native/status-bar';
+import { config } from '../firebase-config';
 
 @NgModule({
     declarations: [
@@ -29,6 +29,7 @@ firebase.initializeApp(config);
     ],
     imports: [
         BrowserModule,
+        AngularFireModule.initializeApp(config),
         IonicModule.forRoot(MyApp,
             { scrollAssist: false, autoFocusAssist: false }),
         CreateNoticeBoardPageModule,
@@ -37,7 +38,10 @@ firebase.initializeApp(config);
         NoticeBoardPageModule,
         ProfilePageModule,
         SettingsPageModule,
-        IonicStorageModule.forRoot()
+        IonicStorageModule.forRoot(),
+        AngularFireDatabaseModule,
+        AngularFireAuthModule,
+
     ],
     bootstrap: [IonicApp],
     entryComponents: [

@@ -1,11 +1,12 @@
 import { IonicPage, Loading, NavController, NavParams } from 'ionic-angular';
 
 import { AlertProvider } from '../../providers/alert/alert';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Component } from '@angular/core';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { ProfilePage } from '../profile/profile';
-import { Storage } from '@ionic/storage';
 import { UserCredential } from 'firebase/auth';
 import firebase from 'firebase';
 
@@ -18,13 +19,13 @@ export class OtpValidationPage {
   varificationId: string;
   otp: string;
   loader: Loading | null = null;
-  dbRef = firebase.database().ref();
 
   constructor(private navCtrl: NavController,
     private navParams: NavParams,
     private loadingProvider: LoadingProvider,
     private alertProvider: AlertProvider,
-    private storage: Storage) {
+    private afAuth: AngularFireAuth,
+    private afDb: AngularFireDatabase) {
     this.varificationId = this.navParams.data.verificationId
   }
 
@@ -33,7 +34,7 @@ export class OtpValidationPage {
     let signInCredential = firebase.auth.PhoneAuthProvider
       .credential(this.varificationId, this.otp);
     // sign in with the otp entered by user.
-    firebase.auth().signInAndRetrieveDataWithCredential(signInCredential)
+    this.afAuth.auth.signInAndRetrieveDataWithCredential(signInCredential)
       .then(this.onSuccessfullValidation.bind(this),
         this.onFailedValidation.bind(this));
   }
@@ -52,20 +53,14 @@ export class OtpValidationPage {
 
   createOrSignInUser(user: UserCredential) {
     const { uid } = user.user;
-    const userRef = this.dbRef.child('users');
-    firebase.auth().currentUser.getIdToken().then(token => {
-      console.log(token);
-      this.storage.set('token', token);
-    })
-    userRef.once('value', (snap) => {
-      if (snap.child(uid).exists()) {
-        this.navCtrl.setRoot(HomePage);
-      } else {
-        this.navCtrl.setRoot(ProfilePage, { createUser: true });
-      }
-    });
-
-
-  }
-
+    this.afDb.object('users/' + uid).valueChanges()
+      .first().subscribe(existingUser => {
+        if (existingUser) {
+          this.navCtrl.setRoot(HomePage);
+        } else {
+          this.navCtrl.setRoot(ProfilePage, { createUser: true });
+        }
+      });
+  };
 }
+

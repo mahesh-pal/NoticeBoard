@@ -1,9 +1,12 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { OtpValidationPage } from './otp-validation';
 import { AlertProvider } from '../../providers/alert/alert';
-import { LoadingProvider } from '../../providers/loading/loading';
+import { AngularFireAuthModule } from 'angularfire2/auth'
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { IonicPageModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
+import { LoadingProvider } from '../../providers/loading/loading';
+import { NgModule } from '@angular/core';
+import { OtpValidationPage } from './otp-validation';
+
 @NgModule({
     declarations: [
         OtpValidationPage,
@@ -11,6 +14,8 @@ import { IonicStorageModule } from '@ionic/storage';
     imports: [
         IonicPageModule.forChild(OtpValidationPage),
         IonicStorageModule.forRoot(),
+        AngularFireAuthModule,
+        AngularFireDatabaseModule,
     ], providers: [
         AlertProvider, LoadingProvider,
     ]
