@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import firebase, { User } from 'firebase';
 
+import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
 import { CreateNoticeBoardPage } from '../create-notice-board/create-notice-board';
 import { NavController } from 'ionic-angular';
@@ -12,40 +12,19 @@ import { NoticeBoardPage } from '../notice-board/notice-board';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  noticeBoards: NoticeBoard[] = [];
+  noticeBoards$;
   userDbRef;
-  currentUser: User;
+  currentUser;
   noticeBoardPage = NoticeBoardPage;
   createNoticeBoardPage = CreateNoticeBoardPage;
   constructor(private nav: NavController,
     public authProvider: AuthProvider,
-    private chageDetectionRef: ChangeDetectorRef) {
+    private chageDetectionRef: ChangeDetectorRef,
+    private afDb: AngularFireDatabase) {
   }
   ionViewWillEnter() {
     this.currentUser = this.authProvider.getActiveUser();
-    this.userDbRef = firebase.database().ref().child('users')
-      .child(this.currentUser.uid).child('boards');
-    this.userDbRef.on('value', this.getBoardsForUser.bind(this));
-  }
-
-  ionViewDidLeave() {
-    this.userDbRef.off();
-  }
-
-  getBoardsForUser(snap) {
-    if (!snap.val()) return;
-    this.noticeBoards = [];
-    const boards = snap.val();
-    // TODO: better way to iterate snapshot
-    const boardsIds = Object.keys(boards);
-    for (const boardId of boardsIds) {
-      const board = boards[boardId] as NoticeBoard;
-      board.id = boardId;
-      this.noticeBoards.push(board);
-    }
-    // Running ChangeDetection manually
-    setTimeout(() => {
-      this.chageDetectionRef.detectChanges();
-    }, 0);
+    this.noticeBoards$ = this.afDb
+      .list('users/' + this.currentUser.uid + '/boards').valueChanges()
   }
 }

@@ -11,7 +11,7 @@
 
 <ion-content padding>
     <ion-list inset class="noticeBoard-list">
-        <button ion-item *ngFor="let noticeBoard of noticeBoards" [navPush]="noticeBoardPage"
+        <button ion-item *ngFor="let noticeBoard of noticeBoards$|async" [navPush]="noticeBoardPage"
             [navParams]="noticeBoard">
             <ion-avatar item-start>
                 <img [src]="noticeBoard.imageUrl" *ngIf="noticeBoard.imageUrl">

@@ -43,9 +43,9 @@ export class CreateNoticeBoardPage {
         this.contactList.push(contact.phoneNumbers[0].value);
       }
     }
-    this.afDatabase.object('users').query.once('value')
-      .then(this.getSelectedUsers.bind(this));
+    for (let contact of this.contactList) {
 
+    }
   }
 
   // TODO: get users only for which contact is selected
