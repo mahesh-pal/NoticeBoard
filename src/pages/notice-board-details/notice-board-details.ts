@@ -78,7 +78,7 @@ export class NoticeBoardDetailsPage {
       this.navCtrl.setRoot(HomePage);
     }, () => {
       this.loadingProvider.dismiss(loader);
-      this.alertProvider('group creation failed');
+      this.alertProvider.showAlert('group creation failed');
     })
   }
 

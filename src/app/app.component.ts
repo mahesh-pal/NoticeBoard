@@ -29,7 +29,8 @@ export class MyApp {
     private menuCtrl: MenuController,
     private loadingProvider: LoadingProvider,
     private authPrpvider: AngularFireAuth,
-    private db: AngularFireDatabase) {
+    private db: AngularFireDatabase,
+    private auth: AuthProvider) {
     //disable keyboard scroll. this line prevents UI getting distorted on
     //android device.
     this.keyboard.disableScroll(true);
@@ -46,6 +47,7 @@ export class MyApp {
         //authProvider.isAuthenticated = true;
         this.rootPage = HomePage;
         this.user = user;
+        this.auth.currentUser = user;
       } else {
         // authProvider.isAuthenticated = false;
         this.rootPage = LoginPage;

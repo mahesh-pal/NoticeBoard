@@ -1,15 +1,17 @@
+import * as firebase from 'firebase/app';
+
+import { AngularFireAuth } from 'angularfire2/auth'
 import { Injectable } from '@angular/core';
-import firebase from 'firebase';
 
 @Injectable()
 export class AuthProvider {
-    isAuthenticated = false;
-    constructor() {
+    private currentUser: firebase.User;
+    constructor(private auth: AngularFireAuth) {
+        auth.authState.subscribe((user: firebase.User) => {
+            this.currentUser = user
+        });
     }
-
     getActiveUser() {
-        return firebase.auth().currentUser;
+        return this.currentUser;
     }
-
-
 }
