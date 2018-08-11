@@ -18,13 +18,14 @@ export class NoticeBoardPage {
   messages$;
   messageBoardRef;
   admins: any = {};
-
+  currentUser;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private changeDetectionRef: ChangeDetectorRef,
     public auth: AuthProvider,
     private afDb: AngularFireDatabase) {
+    this.currenrUser = this.auth.getActiveUser();
     this.noticeBoard = this.navParams.data;
     this.messages$ = this.afDb.list('boards/' + this.noticeBoard.id + '/messages')
       .valueChanges();
@@ -33,7 +34,6 @@ export class NoticeBoardPage {
   ionViewWillEnter() {
     this.afDb.object('boards/' + this.noticeBoard.id + '/admins').valueChanges().subscribe(admins => {
       this.admins = admins;
-      console.log(this.admins);
     });
   }
 

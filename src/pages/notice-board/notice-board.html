@@ -1,5 +1,4 @@
 <ion-header>
-
     <ion-navbar>
         <ion-title>{{noticeBoard.boardName|uppercase}}</ion-title>
     </ion-navbar>
@@ -14,7 +13,7 @@
         </ion-card-content>
     </ion-card>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="admins[currentUser.uid]">
     <ion-textarea [(ngModel)]="message" placeholder="Type your message here" (keypress)="onSendMessage($event)">
     </ion-textarea>
 </ion-footer>
