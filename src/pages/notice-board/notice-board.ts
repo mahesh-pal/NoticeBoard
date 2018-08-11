@@ -25,7 +25,7 @@ export class NoticeBoardPage {
     private changeDetectionRef: ChangeDetectorRef,
     public auth: AuthProvider,
     private afDb: AngularFireDatabase) {
-    this.currenrUser = this.auth.getActiveUser();
+    this.currentUser = this.auth.getActiveUser();
     this.noticeBoard = this.navParams.data;
     this.messages$ = this.afDb.list('boards/' + this.noticeBoard.id + '/messages')
       .valueChanges();

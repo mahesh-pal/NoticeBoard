@@ -30,7 +30,7 @@ export class NoticeBoardDetailsPage {
   boardName = '';
   description = '';
   url = '';
-
+  boardKey: string;
   constructor(public navCtrl: NavController,
     public navParams: NavParams, private auth: AuthProvider,
     private loadingProvider: LoadingProvider,
@@ -40,6 +40,7 @@ export class NoticeBoardDetailsPage {
     private util: UtilProvider,
     private afStorage: AngularFireStorage) {
     this.userIds = this.navParams.data;
+    this.boardKey = this.afDb.list('/boards').push().key;
   }
 
   createNoticeBoard() {
@@ -59,19 +60,19 @@ export class NoticeBoardDetailsPage {
       imageUrl: this.url
     } as NoticeBoard;
 
-    const boardKey = this.afDb.list('/boards').push().key;
+
     const updates = {};
 
     for (const uid of this.userIds) {
-      updates['users/' + uid + '/boards/' + boardKey] =
+      updates['users/' + uid + '/boards/' + this.boardKey] =
         {
           boardName: this.boardName,
           imageUrl: this.url,
           description: this.description,
-          id: boardKey,
+          id: this.boardKey,
         }
     }
-    updates['boards/' + boardKey] = board;
+    updates['boards/' + this.boardKey] = board;
     this.afDb.object('/').update(updates).then(() => {
       this.loadingProvider.dismiss(loader);
       this.navCtrl.setRoot(HomePage);
@@ -98,16 +99,21 @@ export class NoticeBoardDetailsPage {
       let picData = await this.camera.getPicture(options);
 
       picData = 'data:image/jpeg;base64,' + picData;
-      this.afStorage.upload('boardsImages', picData);
-      this.afStorage.ref('boardsImages').getDownloadURL().subscribe((url) => {
-        this.url = url;
-      })
 
-      this.loadingProvider.dismiss(loader);
+      const storageRef = this.afStorage.ref('boardsImages/' + this.boardKey);
+
+      storageRef.putString(picData, 'data_url').then(snapshot => {
+        storageRef.getDownloadURL().subscribe(url => {
+          this.loadingProvider.dismiss(loader);
+          this.url = url;
+        });
+      })
     } catch (error) {
+      console.log(error);
       this.loadingProvider.dismiss(loader);
       this.alertProvider
-        .showAlert('profile pic upload failed.', 'profile pic update failed');
+        .showAlert('profile pic upload failed.',
+          'profile pic update failed');
     }
   }
 

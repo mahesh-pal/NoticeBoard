@@ -21,8 +21,6 @@ export class HomePage {
     public authProvider: AuthProvider,
     private chageDetectionRef: ChangeDetectorRef,
     private afDb: AngularFireDatabase) {
-  }
-  ionViewWillEnter() {
     this.currentUser = this.authProvider.getActiveUser();
     this.noticeBoards$ = this.afDb
       .list('users/' + this.currentUser.uid + '/boards').valueChanges()

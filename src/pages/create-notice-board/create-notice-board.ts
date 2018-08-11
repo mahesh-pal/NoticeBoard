@@ -50,9 +50,9 @@ export class CreateNoticeBoardPage {
     for (let contact of this.contactList) {
       contact = contact.replace(/[|#|_|]/g, '').replace(/\s\s+/g, '');
       this.afDatabase.object('userPhoneMappings/' + contact).valueChanges()
-        .first().subscribe(user => {
+        .first().subscribe((user: User) => {
           if (user && user.uid !== currentUser.uid)
-            this.users.push(user as User);
+            this.users.push(user);
         });
     }
   }
