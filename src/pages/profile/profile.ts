@@ -112,7 +112,7 @@ export class ProfilePage {
       this.afDb.list('users/' + activeUser.uid + '/boards').valueChanges()
         .first().subscribe(boards => {
           for (const board of boards) {
-            updates['boards/' + board.id + '/admins/' + activeUser.uid + '/displayName'] = this.user.displayName;
+            updates['boards/' + board['id'] + '/admins/' + activeUser.uid + '/displayName'] = this.user.displayName;
           }
           this.afDb.object("/")
             .update(updates).then(() => {

@@ -4,6 +4,7 @@ import { MenuController, NavController, Platform } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../providers/auth/auth';
+import { FcmProvider } from '../providers/fcm/fcm';
 import { HomePage } from '../pages/home/home';
 import { Keyboard } from '@ionic-native/keyboard';
 import { LoadingProvider } from '../providers/loading/loading';
@@ -30,7 +31,8 @@ export class MyApp {
     private loadingProvider: LoadingProvider,
     private authPrpvider: AngularFireAuth,
     private db: AngularFireDatabase,
-    private auth: AuthProvider) {
+    private auth: AuthProvider,
+    private fcm: FcmProvider) {
     //disable keyboard scroll. this line prevents UI getting distorted on
     //android device.
     this.keyboard.disableScroll(true);
@@ -48,12 +50,17 @@ export class MyApp {
         this.rootPage = HomePage;
         this.user = user;
         this.auth.currentUser = user;
+        this.fcm.getToken();
+        this.fcm.listenForNotification(((message) => {
+          console.log(message)
+        }));
+        subscription.unsubscribe();
       } else {
         // authProvider.isAuthenticated = false;
         this.rootPage = LoginPage;
         this.user = null;
       }
-      subscription.unsubscribe();
+
     });
 
     platform.ready().then(() => {
@@ -61,6 +68,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+
     });
   }
 

@@ -8,6 +8,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AuthProvider } from '../providers/auth/auth';
 import { BrowserModule } from '@angular/platform-browser';
 import { CreateNoticeBoardPageModule } from '../pages/create-notice-board/create-notice-board.module';
+import { FcmProvider } from '../providers/fcm/fcm';
 import { HomePage } from '../pages/home/home';
 import { IonicStorageModule } from '@ionic/storage';
 import { Keyboard } from '@ionic-native/keyboard';
@@ -55,6 +56,7 @@ import { config } from '../firebase-config';
         LoadingProvider,
         AlertProvider,
         AuthProvider,
+        FcmProvider,
     ]
 })
 export class AppModule { }
