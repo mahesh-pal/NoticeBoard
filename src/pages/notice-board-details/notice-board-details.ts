@@ -40,7 +40,7 @@ export class NoticeBoardDetailsPage {
     private util: UtilProvider,
     private afStorage: AngularFireStorage) {
     this.userIds = this.navParams.data;
-    this.boardKey = this.afDb.list('/boards').push().key;
+    this.boardKey = this.afDb.createPushId();
   }
 
   createNoticeBoard() {

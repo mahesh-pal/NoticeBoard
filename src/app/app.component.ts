@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MenuController, NavController, Platform } from 'ionic-angular';
 
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -36,6 +36,7 @@ export class MyApp {
     //disable keyboard scroll. this line prevents UI getting distorted on
     //android device.
     this.keyboard.disableScroll(true);
+
     // Making Authentication persistance
 
     // firebase.auth().setPersistence(
@@ -68,6 +69,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+
 
     });
   }
