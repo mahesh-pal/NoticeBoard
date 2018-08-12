@@ -35,4 +35,5 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 google-services.json
 src/firebase-config.ts
+package-lock.json
 
