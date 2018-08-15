@@ -1,5 +1,6 @@
 import { AlertProvider } from '../../providers/alert/alert';
 import { AngularFireDatabaseModule } from '../../../node_modules/angularfire2/database';
+import { AngularFireStorageModule } from '../../../node_modules/angularfire2/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import { Camera } from '@ionic-native/camera';
 import { IonicPageModule } from 'ionic-angular';
@@ -15,6 +16,7 @@ import { UtilProvider } from '../../providers/util/util';
   imports: [
     IonicPageModule.forChild(ProfilePage),
     AngularFireDatabaseModule,
+    AngularFireStorageModule
   ],
   entryComponents: [
     ProfilePage,

@@ -2,7 +2,7 @@ import 'rxjs/add/operator/first';
 
 import { ActionSheetController, IonicPage, NavController, TextInput } from 'ionic-angular';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera';
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { AlertProvider } from '../../providers/alert/alert';
 import { AngularFireDatabase } from '../../../node_modules/angularfire2/database';
@@ -10,10 +10,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { HomePage } from '../home/home';
 import { LoadingProvider } from '../../providers/loading/loading';
 import { NavParams } from 'ionic-angular';
-import { ReplaySubject } from '../../../node_modules/rxjs/Rx';
 import { User } from '../../models/user';
 import { UtilProvider } from '../../providers/util/util';
-import firebase from 'firebase';
 
 const options: CameraOptions = {
   quality: 100,
@@ -41,7 +39,6 @@ export class ProfilePage {
     private camera: Camera,
     private loadingProvider: LoadingProvider,
     private alertProvider: AlertProvider,
-    private changeDetection: ChangeDetectorRef,
     private navParam: NavParams,
     private afDb: AngularFireDatabase) {
     this.isCreateUser = !!this.navParam.data.createUser;
@@ -67,35 +64,35 @@ export class ProfilePage {
     try {
       var loader = this.loadingProvider.showLoading()
       const user = this.auth.getActiveUser();
-      let picData = await this.camera.getPicture(options);
-
+      let picData = await this.camera.getPicture(options) as string;
       picData = 'data:image/jpeg;base64,' + picData;
+      const imagePath = 'profileImages/' + user.uid;
 
-      const ref = firebase.storage().ref().child('profileImages')
-        .child(user.uid);
-      ref.putString(picData, firebase.storage.StringFormat.DATA_URL);
+      //upload image to firebase
+      await this.util
+        .uploadImageToFirebase(imagePath, picData);
+      this.util.getDownloadUrl(imagePath).first().subscribe(url => {
+        const profileP = this.util.updateProfilePhoto(user, url);
+        const userP = this.afDb.object('users/' + user.uid).update({
+          photoURL: url
+        });
 
-      const url = await ref.getDownloadURL();
-      await user.updateProfile({
-        displayName: user.displayName,
-        photoURL: url
-      });
-
-      firebase.database().ref().child('users').child(user.uid).update({
-        photoURL: url
-      });
-
-      this.loadingProvider.dismiss(loader);
-      setTimeout(() => {
-        this.changeDetection.detectChanges();
-      }, 0)
+        Promise.all([userP, profileP]).then(() => {
+          this.user.photoURL = url;
+          this.loadingProvider.dismiss(loader);
+        }).catch(error => {
+          this.loadingProvider.dismiss(loader);
+          this.alertProvider
+            .showAlert('profile pic upload failed.', 'profile pic update failed');
+        }
+        )
+      })
     } catch (error) {
       this.loadingProvider.dismiss(loader);
       this.alertProvider
         .showAlert('profile pic upload failed.', 'profile pic update failed');
     }
   }
-
 
   updateDisplayName() {
     const activeUser = this.auth.getActiveUser();
@@ -162,5 +159,3 @@ export class ProfilePage {
         'profile creation failed');
   }
 }
-
-
