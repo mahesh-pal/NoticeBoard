@@ -10,4 +10,7 @@ page-notice-board {
         background: #fff;
         z-index: 999;
     }
+    ion-card.no-shadow{
+        box-shadow: none!important;
+    }
 }

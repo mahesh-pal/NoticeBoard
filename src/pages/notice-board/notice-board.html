@@ -3,22 +3,25 @@
         <ion-title>{{noticeBoard.boardName|uppercase}}</ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content padding>
+<ion-content padding-bottom>
     <ion-list [virtualScroll]="messages$|async">
         <ion-item *virtualItem="let message">
-            <ion-card>
+            <ion-card class="no-shadow">
                 <ion-card-header>
                     {{admins[message.createdBy]?.displayName}}
+                    <p>posted on {{message.createdAt|date:'short'}}</p>
                 </ion-card-header>
-                <ion-card-content>
-                    {{message.text}}
+                <ion-card-content text-wrap>
+                    <p>
+                        {{message.text}}
+                    </p>
                 </ion-card-content>
             </ion-card>
         </ion-item>
     </ion-list>
 
 </ion-content>
-<ion-footer *ngIf="admins[currentUser?.uid]">
+<ion-footer *ngIf="admins[currentUser?.uid]" margin-top>
     <ion-textarea [(ngModel)]="message" placeholder="Type your message here" (keypress)="onSendMessage($event)">
     </ion-textarea>
 </ion-footer>
