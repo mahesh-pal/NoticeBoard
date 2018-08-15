@@ -6,4 +6,8 @@ page-notice-board {
     ion-textarea{
         border: 1px solid #2b6dad !important
     }
+    ion-footer{
+        background: #fff;
+        z-index: 999;
+    }
 }

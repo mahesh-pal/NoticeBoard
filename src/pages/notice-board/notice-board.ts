@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import 'rxjs/add/operator/map'
+
+import { Content, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
-import { Message } from '../../models/message';
+import { Component } from '@angular/core';
 import { NoticeBoard } from '../../models/notice-board';
-import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -22,12 +22,14 @@ export class NoticeBoardPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private changeDetectionRef: ChangeDetectorRef,
     public auth: AuthProvider,
     private afDb: AngularFireDatabase) {
     this.currentUser = this.auth.getActiveUser();
     this.noticeBoard = this.navParams.data;
-    this.messages$ = this.afDb.list('boards/' + this.noticeBoard.id + '/messages')
+    this.messages$ = this.afDb
+      .list('boards/' + this.noticeBoard.id + '/messages', (ref) => {
+        return ref.orderByChild('createdAt').limitToLast(10);
+      })
       .valueChanges();
   }
 

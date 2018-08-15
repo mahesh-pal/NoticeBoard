@@ -1,11 +1,12 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import 'rxjs/add/operator/map';
 
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
+import { Component } from '@angular/core';
 import { CreateNoticeBoardPage } from '../create-notice-board/create-notice-board';
 import { NavController } from 'ionic-angular';
-import { NoticeBoard } from '../../models/notice-board';
 import { NoticeBoardPage } from '../notice-board/notice-board';
+import { Observable } from '../../../node_modules/rxjs';
 
 @Component({
   selector: 'page-home',
@@ -19,10 +20,10 @@ export class HomePage {
   createNoticeBoardPage = CreateNoticeBoardPage;
   constructor(private nav: NavController,
     public authProvider: AuthProvider,
-    private chageDetectionRef: ChangeDetectorRef,
     private afDb: AngularFireDatabase) {
     this.currentUser = this.authProvider.getActiveUser();
     this.noticeBoards$ = this.afDb
-      .list('users/' + this.currentUser.uid + '/boards').valueChanges()
+      .list('users/' + this.currentUser.uid + '/boards')
+      .valueChanges()
   }
 }

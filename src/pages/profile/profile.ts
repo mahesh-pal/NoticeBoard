@@ -97,6 +97,7 @@ export class ProfilePage {
   updateDisplayName() {
     const activeUser = this.auth.getActiveUser();
     const loader = this.loadingProvider.showLoading();
+
     activeUser.updateProfile({
       displayName: this.user.displayName,
       photoURL: this.user.photoURL

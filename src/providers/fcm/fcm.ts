@@ -6,15 +6,11 @@ import { Platform } from 'ionic-angular';
 @Injectable()
 export class FcmProvider {
 
-  constructor(private platform: Platform, private db: AngularFireDatabase, private auth: AuthProvider) {
-    (<any>window).FirebasePlugin.hasPermission(function (data) {
-      console.log("permission" + data.isEnabled);
-    });
+  constructor(private platform: Platform,
+    private db: AngularFireDatabase, private auth: AuthProvider) {
   }
 
   getToken() {
-    console.log(this.platform.is('android'));
-    console.log(this.platform.is('cordova'));
     if (this.platform.is('android')) {
       (<any>window).FirebasePlugin.getToken((token) => {
         this.saveToken(token);

@@ -4,14 +4,19 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding>
-    <ion-card *ngFor="let message of messages$|async">
-        <ion-card-header>
-            {{admins[message.createdBy]?.displayName}}
-        </ion-card-header>
-        <ion-card-content>
-            {{message.text}}
-        </ion-card-content>
-    </ion-card>
+    <ion-list [virtualScroll]="messages$|async">
+        <ion-item *virtualItem="let message">
+            <ion-card>
+                <ion-card-header>
+                    {{admins[message.createdBy]?.displayName}}
+                </ion-card-header>
+                <ion-card-content>
+                    {{message.text}}
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+
 </ion-content>
 <ion-footer *ngIf="admins[currentUser?.uid]">
     <ion-textarea [(ngModel)]="message" placeholder="Type your message here" (keypress)="onSendMessage($event)">
